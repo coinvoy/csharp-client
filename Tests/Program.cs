@@ -17,11 +17,12 @@ namespace Tests
             Console.WriteLine("Creating a new ESCROW INVOICE.");
             Dictionary<string, string> options = new Dictionary<string, string>();
             options.Add("email", "alpdeniz@gmail.com");
-            options.Add("provider", "Kodaman");
-            options.Add("description", "Ode, kendini ozel hisset");
+            options.Add("company", "Your company");
+            options.Add("item", "Item");
+            options.Add("description", "Item description");
             options.Add("escrow", "true");
 
-            var invoiceResultObj = cv.invoice("0.001", "1JZbrknYYEEySTJSrsrECg4vpmitZ1s8wb", "BTC", options);
+            var invoiceResultObj = cv.payment("0.001", "1JZbrknYYEEySTJSrsrECg4vpmitZ1s8wb", "BTC", options);
 
             Console.WriteLine("Invoice ID is: "+invoiceResultObj.id+" and invoice url is: "+invoiceResultObj.url+" and the key is: " + invoiceResultObj.key);
             if (invoiceResultObj.success)
@@ -60,13 +61,14 @@ namespace Tests
             //CREATE BUTTON
             Console.WriteLine("Creating a new BUTTON.");
             options = new Dictionary<string, string>();
-            options.Add("email", "alpdeniz@gmail.com");
-            options.Add("provider", "Kodaman");
-            options.Add("description", "Ode, kendini ozel hisset");
+            options.Add("email", "notification email");
+            options.Add("company", "Your Company");
+            options.Add("item", "Item");
+            options.Add("description", "Item description");
 
             var buttonResultObj = cv.button("0.001", "1JZbrknYYEEySTJSrsrECg4vpmitZ1s8wb", "BTC", options);
 
-            Console.WriteLine("Invoice hash is: " + buttonResultObj.hash + " and invoice url is: " + buttonResultObj.url);
+            Console.WriteLine("Invoice hash is: " + buttonResultObj.hash);
             if (buttonResultObj.success)
             {
                 Console.WriteLine("Create button: OK");
@@ -75,13 +77,14 @@ namespace Tests
             //CREATE DONATION BUTTON
             Console.WriteLine("Creating a new DONATION button.");
             options = new Dictionary<string, string>();
-            options.Add("email", "alpdeniz@gmail.com");
-            options.Add("provider", "Kodaman");
-            options.Add("description", "Ode, kendini ozel hisset");
+            options.Add("email", "notification email");
+            options.Add("company", "Your Company");
+            options.Add("item", "Item");
+            options.Add("callback", "callbackurl");
 
             var donationResultObj = cv.donation("1JZbrknYYEEySTJSrsrECg4vpmitZ1s8wb", options);
 
-            Console.WriteLine("Invoice hash is: " + donationResultObj.hash + " and invoice url is: " + donationResultObj.url);
+            Console.WriteLine("Invoice hash is: " + donationResultObj.hash);
             if (donationResultObj.success)
             {
                 Console.WriteLine("Create donation button: OK");

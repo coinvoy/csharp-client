@@ -13,14 +13,20 @@ namespace CoinvoyAPI
         public bool success { get; set; }
         public string id { get; set; }
         public string orderID { get; set; }
-        public string invoiceID { get; set; }
+        public string item { get; set; }
+        public string description { get; set; }
+        //public string invoiceID { get; set; }
         public string address { get; set; }
         public string amount { get; set; }
         public string currency { get; set; }
         public string payAmount { get; set; }
         public bool escrow { get; set; }
+        public string company { get; set; }
+        public string motto { get; set; }
+        public string companyLogo { get; set; }
+        public string addressLine1 { get; set; }
+        public string addressLine2 { get; set; }
         public string status { get; set; }
-
     }
 #endregion
 
@@ -42,6 +48,8 @@ namespace CoinvoyAPI
         public string url { get; set; }
         public string key { get; set; }
         public string html { get; set; }
+        public string payAmount { get; set; }
+        public string address { get; set; }
     }
 #endregion
 
@@ -49,7 +57,6 @@ namespace CoinvoyAPI
     public class ButtonResultJson
     {
         public bool success { get; set; }
-        public string url { get; set; }
         public string hash { get; set; }
         public string html { get; set; }
     }

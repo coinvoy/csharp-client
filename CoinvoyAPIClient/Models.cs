@@ -11,26 +11,42 @@ namespace CoinvoyAPI
         public bool success { get; set; }
         public string id { get; set; }
         public string orderID { get; set; }
-        public string invoiceID { get; set; }
+        public string item { get; set; }
+        public string description { get; set; }
+        //public string invoiceID { get; set; }
         public string address { get; set; }
         public string amount { get; set; }
         public string currency { get; set; }
         public string payAmount { get; set; }
         public bool escrow { get; set; }
-        //public string status { get; set; }
+        public string company { get; set; }
+        public string motto { get; set; }
+        public string companyLogo { get; set; }
+        public string addressLine1 { get; set; }
+        public string addressLine2 { get; set; }
+        public string status { get; set; }
+
         public InvoiceInfo(dynamic obj)
         {
             this.success = (bool)obj.success;
             this.id = (string)obj.id;
             this.orderID = (string)obj.orderID;
-            this.invoiceID = (string)obj.invoiceID;
+            this.item = (string)obj.item;
+            this.description = (string)obj.description;
+            //this.invoiceID = (string)obj.invoiceID;
             this.address = (string)obj.address;
             this.amount = (string)obj.amount;
             this.currency = (string)obj.currency;
-            this.amount = (string)obj.payAmount;
+            this.amount = (string)obj.amount;
+            this.payAmount = (string)obj.payAmount;
             this.escrow = (bool)obj.escrow;
-            //this.status = (string)obj.status;
-	    }
+            this.company = (string)obj.company;
+            this.motto = (string)obj.motto;
+            this.companyLogo = (string)obj.companyLogo;
+            this.addressLine1 = (string)obj.addressLine1;
+            this.addressLine2 = (string)obj.addressLine2;
+            this.status = (string)obj.status;
+        }
     }
 
     public class StatusInfo
@@ -56,6 +72,8 @@ namespace CoinvoyAPI
         public string key { get; set; }
         public string url { get; set; }
         public string html { get; set; }
+        public string payAmount { get; set; }
+        public string address { get; set; }
 
         public InvoiceResult(dynamic obj)
         {
@@ -64,6 +82,8 @@ namespace CoinvoyAPI
             this.key = (string)obj.key;
             this.url = (string)obj.url;
             this.html = (string)obj.html;
+            this.payAmount = (string)obj.payAmount;
+            this.address = (string)obj.address;
         }
     }
 
@@ -71,14 +91,12 @@ namespace CoinvoyAPI
     {
         public bool success { get; set; }
         public string hash { get; set; }
-        public string url { get; set; }
         public string html { get; set; }
 
         public ButtonResult(dynamic obj)
         {
             this.success = (bool)obj.success;
             this.hash = (string)obj.hash;
-            this.url = (string)obj.url;
             this.html = (string)obj.html;
         }
     }

@@ -23,27 +23,29 @@ namespace CoinvoyAPI
 	
 	public class Coinvoy
     {
-		//private string URL_BASE = "http://178.62.254.129/api/";
         private string URL_BASE = "https://coinvoy.net/api/";
-        private HttpClient client;
-		
 
         public Coinvoy()
         {
-            client = new HttpClient();
-            client.BaseAddress = new Uri(URL_BASE);
+
         }
 
 		// Invoice Information
 		public InvoiceInfo getInvoice(string invoiceID)
 		{
+            Dictionary<string, string> requestObj = new Dictionary<string, string>();
+            requestObj.Add("invoiceID", invoiceID);
 
-            string url = URL_BASE + "invoice/" + invoiceID;
-            var result = client.GetAsync(url).Result;
-            HttpContent response = result.Content;
+            string json = JsonConvert.SerializeObject(requestObj);
 
-            string res = response.ReadAsStringAsync().Result;
-            dynamic obj = JsonConvert.DeserializeObject<InvoiceJson>(res);
+            string result = String.Empty;
+            using (var client = new WebClient())
+            {
+                client.Headers.Add("Content-Type", "application/json");
+                result = client.UploadString(URL_BASE + "invoice", "POST", json);
+            }
+
+            dynamic obj = JsonConvert.DeserializeObject<InvoiceJson>(result);
 
             return new InvoiceInfo(obj);
 		}
@@ -51,62 +53,74 @@ namespace CoinvoyAPI
 		// INVOICE STATUS
 		public StatusInfo getStatus(string invoiceID)
 		{
-            string url = URL_BASE + "status/" + invoiceID;
-            var result = client.GetAsync(url).Result;
-            HttpContent response = result.Content;
+            Dictionary<string, string> requestObj = new Dictionary<string, string>();
+            requestObj.Add("invoiceID", invoiceID);
+            string json = JsonConvert.SerializeObject(requestObj);
 
-            string res = response.ReadAsStringAsync().Result;
-            dynamic obj = JsonConvert.DeserializeObject<StatusJson>(res);
+            string result = String.Empty;
+            using (var client = new WebClient())
+            {
+                client.Headers.Add("Content-Type", "application/json");
+                result = client.UploadString(URL_BASE + "status", "POST", json);
+            }
+
+            dynamic obj = JsonConvert.DeserializeObject<StatusJson>(result);
 
             return new StatusInfo(obj);
 		}
 
         // CREATE NEW INVOICE
-        public InvoiceResult invoice(string amount, string address, string currency, Dictionary<string, string> parameters)
+        public InvoiceResult payment(string amount, string address, string currency, Dictionary<string, string> parameters)
         {
-
             parameters.Add("amount", amount);
             parameters.Add("address", address);
             parameters.Add("currency", currency);
-            var content = new FormUrlEncodedContent(parameters);
+            string json = JsonConvert.SerializeObject(parameters);
 
-            var result = client.PostAsync("newInvoice", content).Result;
-            HttpContent response = result.Content;
+            string result = String.Empty;
+            using (var client = new WebClient())
+            {
+                client.Headers.Add("Content-Type", "application/json");
+                result = client.UploadString(URL_BASE + "payment", "POST", json);
+            }
 
-            string res = response.ReadAsStringAsync().Result;
-            dynamic obj = JsonConvert.DeserializeObject<InvoiceResultJson>(res);
+            dynamic obj = JsonConvert.DeserializeObject<InvoiceResultJson>(result);
 
             return new InvoiceResult(obj);
         }
 
         public ButtonResult button(string amount, string address, string currency, Dictionary<string, string> parameters)
         {
-
             parameters.Add("amount", amount);
             parameters.Add("address", address);
             parameters.Add("currency", currency);
-            var content = new FormUrlEncodedContent(parameters);
+            string json = JsonConvert.SerializeObject(parameters);
 
-            var result = client.PostAsync("getButton", content).Result;
-            HttpContent response = result.Content;
+            string result = String.Empty;
+            using (var client = new WebClient())
+            {
+                client.Headers.Add("Content-Type", "application/json");
+                result = client.UploadString(URL_BASE + "button", "POST", json);
+            }
 
-            string res = response.ReadAsStringAsync().Result;
-            dynamic obj = JsonConvert.DeserializeObject<ButtonResultJson>(res);
+            dynamic obj = JsonConvert.DeserializeObject<ButtonResultJson>(result);
 
             return new ButtonResult(obj);
         }
 
         public ButtonResult donation(string address, Dictionary<string, string> parameters)
         {
-
             parameters.Add("address", address);
-            var content = new FormUrlEncodedContent(parameters);
+            string json = JsonConvert.SerializeObject(parameters);
 
-            var result = client.PostAsync("getDonation", content).Result;
-            HttpContent response = result.Content;
+            string result = String.Empty;
+            using (var client = new WebClient())
+            {
+                client.Headers.Add("Content-Type", "application/json");
+                result = client.UploadString(URL_BASE + "donation", "POST", json);
+            }
 
-            string res = response.ReadAsStringAsync().Result;
-            dynamic obj = JsonConvert.DeserializeObject<ButtonResultJson>(res);
+            dynamic obj = JsonConvert.DeserializeObject<ButtonResultJson>(result);
 
             return new ButtonResult(obj);
         }
@@ -115,22 +129,25 @@ namespace CoinvoyAPI
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             parameters.Add("key", key);
-            var content = new FormUrlEncodedContent(parameters);
+            string json = JsonConvert.SerializeObject(parameters);
 
-            var result = client.PostAsync("freeEscrow", content).Result;
-            HttpContent response = result.Content;
+            string result = String.Empty;
+            using (var client = new WebClient())
+            {
+                client.Headers.Add("Content-Type", "application/json");
+                result = client.UploadString(URL_BASE + "freeEscrow", "POST", json);
+            }
 
-            string res = response.ReadAsStringAsync().Result;
-            dynamic obj = JsonConvert.DeserializeObject<EscrowResultJson>(res);
+            dynamic obj = JsonConvert.DeserializeObject<EscrowResultJson>(result);
 
             return new EscrowResult(obj);
         }
 
-        public bool validateNotification(string invoiceID, string hash, string orderID , string address)
+        public bool validateNotification(string hash, string orderID , string invoiceID, string secret)
         {
             var encoding = new ASCIIEncoding();
             var text = encoding.GetBytes(orderID + ":" + invoiceID);
-            var key = encoding.GetBytes(address);
+            var key = encoding.GetBytes(secret);
             var sha256 = new HMACSHA256(key);
             var signature = BitConverter.ToString(sha256.ComputeHash(text));
 
